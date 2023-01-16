@@ -33,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> fetchListData() async {
     final dioBaseHelper = DioBaseHelper("www.api.com");
     await dioBaseHelper
-        .onRequest(methode: METHODE.get,url: "/list")
+        .onRequest(methode: METHODE.get,endPoint: "/list")
         .then((value) => {
               dataList.add(json.decode(value)),
             })

@@ -13,7 +13,7 @@ Here are small examples that show you how to use dio base helper.
 final dioBaseHelper = await DioBaseHelper("www.api.com");
 
 // for get method request.
-    dio.onRequest(methode: METHODE.get, url: "/list").then((response) {
+    dio.onRequest(methode: METHODE.get, endPoint: "/list").then((response) {
       //here for status code 200
       debugPrint("response$response");
     }).onError((ErrorModel error, stackTrace) {
@@ -21,7 +21,7 @@ final dioBaseHelper = await DioBaseHelper("www.api.com");
       debugPrint('Status code: ${error.statusCode}');
     });
 // for post method request.
-    dio.onRequest(methode: METHODE.post, url: "/product",body: {
+    dio.onRequest(methode: METHODE.post, endPoint: "/product",body: {
       "id": 1
     }).then((response) {
       //here for status code 200

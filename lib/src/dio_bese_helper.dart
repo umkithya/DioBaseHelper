@@ -16,7 +16,7 @@ class DioBaseHelper {
   }
 
   Future<dynamic> onRequest({
-    String? url,
+    String? endPoint,
     required METHODE? methode,
     Map<dynamic, dynamic>? body,
     bool? isAuthorize = false,
@@ -46,7 +46,7 @@ class DioBaseHelper {
     }
     try {
       var dio = Dio();
-      var fullUrl = _baseUrl ?? "$url";
+      var fullUrl = _baseUrl ?? "$endPoint";
       late Response response;
       switch (methode) {
         case METHODE.get:
@@ -102,7 +102,7 @@ class DioBaseHelper {
   }
 
   Future<dynamic> onRequestFormData({
-    String? url,
+    String? endPoint,
     required String filePath,
     bool? isAuthorize = false,
     bool isDebugOn = false,
@@ -131,7 +131,7 @@ class DioBaseHelper {
     }
     try {
       var dio = Dio();
-      var fullUrl = _baseUrl ?? url.toString();
+      var fullUrl = _baseUrl ?? endPoint.toString();
       var formData = FormData.fromMap({
         'username': "+855963288307",
         'file': await MultipartFile.fromFile(filePath),
