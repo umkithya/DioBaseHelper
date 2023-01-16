@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class DioBaseHelper {
-  String? _baseUrl;
+  String _baseUrl = "";
   String? _token;
   String? _session;
   DioBaseHelper(String baseUrl, {String? token, String? session}) {
@@ -46,7 +46,7 @@ class DioBaseHelper {
     }
     try {
       var dio = Dio();
-      var fullUrl = _baseUrl ?? "$endPoint";
+      var fullUrl = "$_baseUrl$endPoint";
       late Response response;
       switch (methode) {
         case METHODE.get:
@@ -131,7 +131,7 @@ class DioBaseHelper {
     }
     try {
       var dio = Dio();
-      var fullUrl = _baseUrl ?? endPoint.toString();
+      var fullUrl = _baseUrl + endPoint.toString();
       var formData = FormData.fromMap({
         'username': "+855963288307",
         'file': await MultipartFile.fromFile(filePath),
