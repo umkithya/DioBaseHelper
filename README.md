@@ -1,5 +1,7 @@
 # DioBaseHelper Plugin
 
+[![Pub](https://raw.githubusercontent.com/umkithya/DioBaseHelper/master/image/package.svg)](https://pub.dev/packages/dio_base_helper)
+
 Make implementation with dio more easier and short.
 
 ### Examples

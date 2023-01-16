@@ -1,6 +1,6 @@
 name: dio_base_helper
 description: Simple helper that provide short coe for dio implementation 
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/umkithya/DioBaseHelper
 
 environment:
