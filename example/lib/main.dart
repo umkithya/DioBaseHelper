@@ -44,8 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> uploadImage() async {
-    final dioBaseHelper = DioBaseHelper(
-        "https://pocketplaner.onrender.com/api/v1",
+    final dioBaseHelper = DioBaseHelper("www.api.com",
         token:
             "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiI4NTU4NTc0ODAwNSIsImlhdCI6MTY3OTEwOTQ2MiwiZXhwIjo0Njc5MTA5NDYyfQ.cisPc85Tdw6FvRVhg8Uyj4Pmt6_-Kz9XkR7c8Xm9J44");
     XFile? file = await ImagePicker().pickImage(source: ImageSource.gallery);
