@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 
 /// Is a class for help dio development better and more easy.
 /// ```dart
@@ -140,6 +139,8 @@ class DioBaseHelper {
       if (isDebugOn) {
         log('FullUrl:$fullUrl');
       }
+      
+      
       var data = FormData.fromMap(formData);
       if (showBodyInput) {
         log('BodyInputDebug:${data.files}');
@@ -163,7 +164,9 @@ class DioBaseHelper {
         log('DioError:${e.response}');
         log('DioError:${e.type}');
       }
-      return await _returnResponse(e.response!);
+      if (e.response != null) {
+        return await _returnResponse(e.response!);
+      }
     }
   }
 

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio_base_helper/dio_base_helper.dart';
 import 'package:flutter/material.dart';
@@ -70,6 +71,37 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  Future<void> uploadImageWithBytes() async {
+    final dioBaseHelper = DioBaseHelper("www.api.com",
+        token:
+            "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyIiwianRpIjoiN2JkMmVhNjkxN2M4YTMwYjkxYTcxMzY5MmE5ZmY2ODAwMmJjZGE5NmU5MzIzNGRiNzI3NTFjYmJjNjU4MDY4YzA3OGE1Nzg3Y2ViMjYxYjgiLCJpYXQiOjE2Nzg4NDc3ODYuMDQ4ODY2LCJuYmYiOjE2Nzg4NDc3ODYuMDQ4ODcsImV4cCI6MTcxMDQ3MDE4Ni4wMzczMDEsInN1YiI6Ijg1MSIsInNjb3BlcyI6WyIqIl19.uOQGVd8MT1EelrToeiK7yuE-y4ey2nNmXZ-If4STcuelfe9LryU99Co0sMLbmZoKimp3I3Z2XVCWNe2IanUtYxfNlaI7yULrhjiltko5Rrv7App-iQbBnuA2b5eKqI6wLppz5bmStc9oHrhdWAgk6qpKNbz5yndwvQ5t0ayjqzFdbqtsunWtTdnYpdXeYnJ1IeckcBU8yrGqeAC_QZ3VpyqkqZv-7NLLs-amK8LCIbO88xoUvsIDMOjZRJIdRh7pe7J--iGbSjjMyesFuyyYcEOUJPg37Qu9ugVmjWO6kgqf0NhP_qZikJqf1phUJsxqwmOGSXHS5Yp7gHr8NGJpQpBmSh0fFncnyisuek4UgUevtAS5h32fJC8tVwdvBOxfzhKxIVxqYjDyUC86w22rETRYv4yVSK0DiREc61uP_BX7XkupkChR-_hieE_tFt1Htzg0qW49EkG0Gag954ToCUOMXaatCaBcAWm0KO35ry95_GVm2sak-4SHZQPqFFeC50PsXgFWnxNdEEEa2OeAngj_5vJQPvxxrSeVFwIchcIXMSErtC4bH5xe9KdGFjEHBee4u-JeHuIKRhXbGkcqUrN4B8n2ipqsHePN43z4aJMMKQC7PXAQGgAk7_V7Gszmsu_EkVJ-15JR3pHzUafq0xURGw-rC47_0qqozU2UKRw");
+    XFile? xfile = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (xfile != null) {
+      final file = File(xfile.path).readAsBytesSync();
+      String base64String = "data:image/png;base64,${base64Encode(file)}";
+      // debugPrint("file: ${xfile.path}");
+      await dioBaseHelper
+          .onRequestFormData(
+            showBodyInput: true,
+            isDebugOn: true,
+            formData: {
+              "image": base64String,
+              "receiver": 946674133,
+              "template_name": "abc",
+            },
+            endPoint: "/create-template",
+            isAuthorize: true,
+          )
+          .then((value) => {
+                debugPrint("value$value"),
+              })
+          .onError((ErrorModel error, stackTrace) => {
+                debugPrint("Error Status code: ${error.statusCode}"),
+              });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
         leading: IconButton(
           onPressed: () async {
-            await uploadImage();
+            await uploadImageWithBytes();
           },
           icon: const Icon(Icons.upload),
         ),
