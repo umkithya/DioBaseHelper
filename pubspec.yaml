@@ -1,6 +1,6 @@
 name: dio_base_helper
 description: Simple helper that provide short coe for dio implementation 
-version: 0.0.3
+version: 0.0.5
 homepage: https://github.com/umkithya/DioBaseHelper
 
 environment:
@@ -8,7 +8,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
-  dio: ^4.0.6
+  dio: ^5.0.3
   flutter:
     sdk: flutter
 

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio_base_helper/dio_base_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> fetchListData() async {
     final dioBaseHelper = DioBaseHelper("www.api.com");
     await dioBaseHelper
-        .onRequest(methode: METHODE.get,endPoint: "/list")
+        .onRequest(methode: METHODE.get, endPoint: "/list")
         .then((value) => {
               dataList.add(json.decode(value)),
             })
@@ -42,22 +43,54 @@ class _MyHomePageState extends State<MyHomePage> {
             });
   }
 
+  Future<void> uploadImage() async {
+    final dioBaseHelper = DioBaseHelper(
+        "https://pocketplaner.onrender.com/api/v1",
+        token:
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiI4NTU4NTc0ODAwNSIsImlhdCI6MTY3OTEwOTQ2MiwiZXhwIjo0Njc5MTA5NDYyfQ.cisPc85Tdw6FvRVhg8Uyj4Pmt6_-Kz9XkR7c8Xm9J44");
+    XFile? file = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (file != null) {
+      debugPrint("file: ${file.path}");
+      await dioBaseHelper
+          .onRequestFormData(
+            showBodyInput: true,
+            isDebugOn: true,
+            formData: {
+              "image": await MultipartFile.fromFile(file.path),
+              "tag": "profile",
+            },
+            endPoint: "/upload-image",
+            isAuthorize: true,
+          )
+          .then((value) => {
+                debugPrint("value$value"),
+              })
+          .onError((ErrorModel error, stackTrace) => {
+                debugPrint("Error Status code: ${error.statusCode}"),
+              });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        leading: IconButton(
+          onPressed: () async {
+            await uploadImage();
+          },
+          icon: const Icon(Icons.upload),
+        ),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-           ...dataList.map((e) =>Text("$e")).toList()
-          ],
+          children: <Widget>[...dataList.map((e) => Text("$e")).toList()],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: ()=>fetchListData(),
+        onPressed: () => fetchListData(),
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),

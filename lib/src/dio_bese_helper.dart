@@ -1,9 +1,18 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
+/// Is a class for help dio development better and more easy.
+/// ```dart
+/// final dioBaseHelper = DioBaseHelper("www.api.com");
+/// ```
 class DioBaseHelper {
+  /// [_baseUrl]. is a parameter for input the base api url.
+  /// ```dart
+  /// final dioBaseHelper = DioBaseHelper("www.api.com");
+  /// ```
   String _baseUrl = "";
   String? _token;
   String? _session;
@@ -12,7 +21,7 @@ class DioBaseHelper {
     _token = token;
     _session = session;
 
-    debugPrint('Constructor Initialized');
+    log('Constructor Initialized');
   }
 
   Future<dynamic> onRequest({
@@ -25,11 +34,11 @@ class DioBaseHelper {
   }) async {
     if (methode != METHODE.get && body == null) {
       throw Exception('Body must not be null of $methode');
-      // debugPrint('Error=======');
+      // log('Error=======');
     }
 
     if (isDebugOn) {
-      debugPrint('token===$_token');
+      log('token===$_token');
     }
     Map<String, String> header = {
       'Content-Type': 'application/json',
@@ -42,7 +51,7 @@ class DioBaseHelper {
     };
 
     if (showBodyInput) {
-      debugPrint('BodyInputDebug:${json.encode(body)}');
+      log('BodyInputDebug:${json.encode(body)}');
     }
     try {
       var dio = Dio();
@@ -90,66 +99,69 @@ class DioBaseHelper {
 
       var lastResponse = await _returnResponse(response);
       if (isDebugOn) {
-        debugPrint("200=====${lastResponse.toString()}");
+        log("200=====${lastResponse.toString()}");
       }
       return lastResponse;
     } on DioError catch (e) {
       if (isDebugOn) {
-        debugPrint('DioError:${e.message}');
+        log('DioError:${e.message}');
       }
       return await _returnResponse(e.response!);
     }
   }
 
   Future<dynamic> onRequestFormData({
+    /// A file to be uploaded as part of a [MultipartRequest]. This doesn't need to
+    /// correspond to a physical file.
+    ///
+    /// MultipartFile is based on stream, and a stream can be read only once,
+    /// so the same MultipartFile can't be read multiple times.
     String? endPoint,
-    required String filePath,
+    required Map<String, dynamic> formData,
     bool? isAuthorize = false,
     bool isDebugOn = false,
     bool showBodyInput = false,
   }) async {
-    // if (methode != METHODE.get && body == null) {
-    //   throw Exception('Body must not be null of $methode');
-    //   // debugPrint('Error=======');
-    // }
-
     if (isDebugOn) {
-      debugPrint('token===$_token');
+      log('Token:$_token');
     }
     Map<String, String> header = {
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
       'Authorization': isAuthorize!
           ? _token != ''
-              ? 'Token $_token'
-              : 'Token $_session'
+              ? '$_token'
+              : '$_session'
           : ""
     };
 
-    if (showBodyInput) {
-      // debugPrint('BodyInputDebug:${json.encode(body)}');
-    }
     try {
       var dio = Dio();
       var fullUrl = _baseUrl + endPoint.toString();
-      var formData = FormData.fromMap({
-        'username': "+85533333333",
-        'file': await MultipartFile.fromFile(filePath),
-      });
+      if (isDebugOn) {
+        log('FullUrl:$fullUrl');
+      }
+      var data = FormData.fromMap(formData);
+      if (showBodyInput) {
+        log('BodyInputDebug:${data.files}');
+      }
       Response response = await dio.post(fullUrl,
-          data: formData,
+          data: data,
           options: Options(
             headers: header,
           ));
 
       var lastResponse = await _returnResponse(response);
       if (isDebugOn) {
-        debugPrint("200=====${lastResponse.toString()}");
+        log("200=====${lastResponse.toString()}");
       }
       return lastResponse;
     } on DioError catch (e) {
       if (isDebugOn) {
-        debugPrint('DioError:${e.message}');
+        log('DioError:${e.message}');
+        log('DioError:${e.error}');
+        log('DioError:${e.stackTrace}');
+        log('DioError:${e.response}');
+        log('DioError:${e.type}');
       }
       return await _returnResponse(e.response!);
     }
