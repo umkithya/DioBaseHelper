@@ -45,8 +45,8 @@ class DioBaseHelper {
       'Accept': 'application/json',
       'Authorization': isAuthorize!
           ? _token != ''
-              ? 'Token $_token'
-              : 'Token $_session'
+              ? '$_token'
+              : '$_session'
           : ""
     };
 
